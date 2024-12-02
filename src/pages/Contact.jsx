@@ -3,14 +3,10 @@ import { motion } from 'framer-motion';
 import { 
   FaGithub, 
   FaLinkedin, 
-  FaEnvelope, 
-  FaAws, 
-  FaDocker,
-  FaPython
+  FaEnvelope,
+  FaAws 
 } from 'react-icons/fa';
 import { 
-  SiTensorflow, 
-  SiPytorch, 
   SiGooglecloud, 
   SiMicrosoftazure 
 } from 'react-icons/si';
@@ -193,28 +189,6 @@ function Contact() {
                     {profile.icon}
                   </motion.a>
                 ))}
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Technical Expertise</h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <SiTensorflow className="mx-auto text-[#FF6F00]" size={32} />
-                  <span className="text-sm mt-1 block">TensorFlow</span>
-                </div>
-                <div className="text-center">
-                  <SiPytorch className="mx-auto text-[#EE4C2C]" size={32} />
-                  <span className="text-sm mt-1 block">PyTorch</span>
-                </div>
-                <div className="text-center">
-                  <FaPython className="mx-auto text-[#3776AB]" size={32} />
-                  <span className="text-sm mt-1 block">Python</span>
-                </div>
-                <div className="text-center">
-                  <FaDocker className="mx-auto text-[#2496ED]" size={32} />
-                  <span className="text-sm mt-1 block">Docker</span>
-                </div>
               </div>
             </div>
           </motion.div>

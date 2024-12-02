@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaAws, FaCloud, FaArrowRight } from 'react-icons/fa';
-import { SiGooglecloud, SiMicrosoftazure, SiTensorflow } from 'react-icons/si';
+import { FaGithub, FaLinkedin, FaEnvelope, FaAws, FaCloud, FaArrowRight, FaDocker, FaPython, FaJava, FaChartBar, FaChartLine } from 'react-icons/fa';
+import { SiGooglecloud, SiMicrosoftazure, SiTensorflow, SiPytorch, SiNumpy, SiPandas, SiScikitlearn, SiCanva, SiTableau, SiPowerbi, SiJupyter, SiC } from 'react-icons/si';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import profilePic from '../assets/dp.jpg';
@@ -39,6 +39,190 @@ function Home() {
     }, 5000);
     return () => clearInterval(timer);
   }, [certificates.length]);
+
+  // Add this section before the Career Goals section
+  const technicalExpertiseSection = (
+    <motion.div
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.3 }}
+      className="mb-16 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg"
+    >
+      <h2 className="text-3xl font-bold mb-8 dark:text-white text-center">Technical Expertise</h2>
+      
+      {/* Programming Languages */}
+      <div className="mb-12">
+        <h3 className="text-xl font-semibold mb-6 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+          💻 Programming Languages
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-8">
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaPython className="mx-auto text-[#3776AB] dark:text-[#4786BB] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Python</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaJava className="mx-auto text-[#007396] dark:text-[#1084A7] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Java</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiC className="mx-auto text-[#A8B9CC] dark:text-[#B8C9DC] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">C</span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ML & Data Science */}
+      <div className="mb-12">
+        <h3 className="text-xl font-semibold mb-6 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+          🧠 ML & Data Science
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-8">
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiTensorflow className="mx-auto text-[#FF6F00] dark:text-[#FF8F00] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">TensorFlow</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiPytorch className="mx-auto text-[#EE4C2C] dark:text-[#FF5C3C] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">PyTorch</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiNumpy className="mx-auto text-[#013243] dark:text-[#114253] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">NumPy</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiPandas className="mx-auto text-[#150458] dark:text-[#251468] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Pandas</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaChartBar className="mx-auto text-[#11557C] dark:text-[#21658C] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Matplotlib</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaChartLine className="mx-auto text-[#4C72B0] dark:text-[#5C82C0] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Seaborn</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiScikitlearn className="mx-auto text-[#F7931E] dark:text-[#FFA32E] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Scikit-learn</span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Cloud & DevOps */}
+      <div className="mb-12">
+        <h3 className="text-xl font-semibold mb-6 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+          ☁️ Cloud & DevOps
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-8">
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaAws className="mx-auto text-[#FF9900] dark:text-[#FFA910] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">AWS</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiGooglecloud className="mx-auto text-[#4285F4] dark:text-[#5295FF] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Google Cloud</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiMicrosoftazure className="mx-auto text-[#0089D6] dark:text-[#1099E6] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Azure</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaDocker className="mx-auto text-[#2496ED] dark:text-[#34A6FD] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Docker</span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Visualization Tools */}
+      <div>
+        <h3 className="text-xl font-semibold mb-6 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+          📊 Visualization Tools
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-8">
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiCanva className="mx-auto text-[#00C4CC] dark:text-[#10D4DC] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Canva</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiTableau className="mx-auto text-[#E97627] dark:text-[#F98637] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Tableau</span>
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SiPowerbi className="mx-auto text-[#F2C811] dark:text-[#FFD821] hover:scale-110 transition-transform" size={40} />
+            <span className="text-sm mt-3 block dark:text-gray-300 font-medium">Power BI</span>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
 
   // Add this section after the Career Goals section
   const certificateSection = (
@@ -130,10 +314,21 @@ function Home() {
         >
           <h1 className="text-4xl font-bold mb-4 dark:text-white">Mohammad Sameer</h1>
           <p className="text-xl text-indigo-600 dark:text-indigo-400 mb-6">ML Engineer & Cloud Architect</p>
-          <div className="prose max-w-none mb-6">
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Passionate about leveraging Machine Learning and Cloud Technologies to build scalable AI solutions. 
-              Specialized in developing and deploying ML models across major cloud platforms.
+          <div className="prose max-w-none mb-6 space-y-4">
+            <p className="text-gray-600 dark:text-gray-300">
+              🚀 Member of team selected by ISRO & URSC in a rover building competition, qualifying for the Quals round 2024.
+            </p>
+            
+            <p className="text-gray-600 dark:text-gray-300">
+              🏆 Proud achiever of Round 2 in Mobile Robotics at the Junior Skills Championship 2021, jointly organized by the National Skill Development Corporation (NSDC) & Central Board of Secondary Education (CBSE).
+            </p>
+            
+            <p className="text-gray-600 dark:text-gray-300">
+              💡 Proficient in the basics of AWS, Google Cloud Platform and Microsoft Azure.
+            </p>
+            
+            <p className="text-gray-600 dark:text-gray-300">
+              🔍 Continuously building upon skills and knowledge to stay ahead in the ever-evolving landscape of technology, aiming to be future-ready for challenges and opportunities in AI and beyond.
             </p>
           </div>
           
@@ -237,6 +432,9 @@ function Home() {
           </ul>
         </div>
       </motion.div>
+
+      {/* Technical Expertise Section */}
+      {technicalExpertiseSection}
 
       {/* Career Goals */}
       <motion.div
