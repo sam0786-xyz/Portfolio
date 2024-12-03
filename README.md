@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -69,6 +68,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-# Portfolio
->>>>>>> 1ee8a96aa48f002297c4755c374bb20dcbaced1a
+
+## Environment Setup
+
+1. Frontend setup:   ```bash
+   cp .env.example .env   ```
+   Edit .env and add your API keys and configuration
+
+2. Backend setup:   ```bash
+   cd backend
+   cp .env.example .env   ```
+   Edit backend/.env and add your MongoDB URI and other secrets
+
+3. Never commit .env files to version control

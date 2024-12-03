@@ -1,15 +1,26 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const api = {
-  // Certificate Analysis
-  analyzeCertificate: async (certificateData) => {
+  // Projects
+  getProjects: async () => {
     try {
-      const response = await axios.post(`${API_URL}/certificates/analyze`, certificateData);
+      const response = await axios.get(`${API_URL}/projects`);
       return response.data;
     } catch (error) {
-      console.error('Error analyzing certificate:', error);
+      console.error('Error fetching projects:', error);
+      throw error;
+    }
+  },
+
+  // Certificates
+  getCertificates: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/certificates`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching certificates:', error);
       throw error;
     }
   },

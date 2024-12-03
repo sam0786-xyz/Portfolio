@@ -333,7 +333,7 @@ function Home() {
           </div>
           
           {/* Social Links */}
-          <div className="flex space-x-4 mb-8">
+          <div className="flex space-x-4">
             <a 
               href="https://github.com/sam0786-xyz" 
               target="_blank" 
@@ -356,25 +356,6 @@ function Home() {
             >
               <FaEnvelope size={24} />
             </a>
-          </div>
-
-          {/* Cloud Platform Expertise */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 dark:text-white">Cloud Expertise</h2>
-            <div className="flex space-x-6">
-              <motion.div whileHover={{ scale: 1.1 }} className="text-center">
-                <FaAws size={32} className="text-[#FF9900] mb-2 mx-auto" />
-                <span className="text-sm dark:text-gray-300">AWS</span>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.1 }} className="text-center">
-                <SiGooglecloud size={32} className="text-[#4285F4] mb-2 mx-auto" />
-                <span className="text-sm dark:text-gray-300">GCP</span>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.1 }} className="text-center">
-                <SiMicrosoftazure size={32} className="text-[#0089D6] mb-2 mx-auto" />
-                <span className="text-sm dark:text-gray-300">Azure</span>
-              </motion.div>
-            </div>
           </div>
         </motion.div>
 

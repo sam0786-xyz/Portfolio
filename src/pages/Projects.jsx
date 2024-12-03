@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaAws, FaPython } from 'react-icons/fa';
 import { SiTensorflow, SiPytorch, SiOpenai, SiKubernetes, SiDocker } from 'react-icons/si';
+import { useData } from '../context/DataContext';
 
 function Projects() {
+  const { projects, loading, error } = useData();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -15,56 +17,12 @@ function Projects() {
     { id: 'ai', name: 'AI & Deep Learning' },
   ];
 
-  // Project data
-  const projects = {
-    major: [
-      {
-        id: 1,
-        title: "AI-Powered Image Recognition System",
-        description: "A scalable computer vision system deployed on AWS, capable of real-time object detection and classification.",
-        longDescription: `Built using state-of-the-art deep learning models and deployed on AWS infrastructure. 
-        Features include:
-        • Real-time object detection and classification
-        • Scalable architecture using AWS Lambda and ECS
-        • Integration with mobile applications via REST API
-        • Custom model training pipeline using SageMaker`,
-        category: "ai",
-        image: "/projects/ai-vision.jpg",
-        technologies: ["TensorFlow", "AWS", "Python", "Docker"],
-        icons: [
-          <SiTensorflow className="text-[#FF6F00]" />,
-          <FaAws className="text-[#FF9900]" />,
-          <FaPython className="text-[#3776AB]" />,
-          <SiDocker className="text-[#2496ED]" />
-        ],
-        githubLink: "https://github.com/yourusername/project1",
-        liveDemo: "https://demo.project1.com",
-        featured: true
-      },
-      // Add more major projects...
-    ],
-    mini: [
-      {
-        id: 101,
-        title: "GPT-3 Text Generator",
-        description: "A web application that generates creative text using OpenAI's GPT-3 API.",
-        category: "ai",
-        image: "/projects/gpt3.jpg",
-        technologies: ["OpenAI API", "React", "Node.js"],
-        icons: [<SiOpenai className="text-black" />],
-        githubLink: "https://github.com/yourusername/gpt3-generator",
-        liveDemo: "https://gpt3-demo.com"
-      },
-      // Add more mini projects...
-    ]
-  };
-
   // Filter projects based on category
   const filteredProjects = {
-    major: projects.major.filter(project => 
+    major: projects.filter(project => 
       selectedCategory === 'all' || project.category === selectedCategory
     ),
-    mini: projects.mini.filter(project => 
+    mini: projects.filter(project => 
       selectedCategory === 'all' || project.category === selectedCategory
     )
   };

@@ -10,10 +10,16 @@ function InteractiveAI() {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [dynamicContent, setDynamicContent] = useState(null);
+  const [dynamicContent, setDynamicContent] = useState({
+    title: '',
+    topics: [],
+    quiz: []
+  });
+  const [error, setError] = useState(null);
 
   const generateAgeAppropriateContent = async (age) => {
     setIsLoading(true);
+    setError(null);
     try {
       const topics = age < 13 
         ? ['What is AI?', 'How do computers learn?', 'AI in everyday life']
@@ -36,10 +42,11 @@ function InteractiveAI() {
           title,
           content: content[index]
         })),
-        quiz: quiz.questions
+        quiz: quiz.questions || []
       });
     } catch (error) {
       console.error('Error generating content:', error);
+      setError('Failed to generate content. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -52,9 +59,11 @@ function InteractiveAI() {
   };
 
   const startQuiz = () => {
-    setCurrentQuiz(0);
-    setQuizAnswers({});
-    setShowResults(false);
+    if (dynamicContent?.quiz?.length > 0) {
+      setCurrentQuiz(0);
+      setQuizAnswers({});
+      setShowResults(false);
+    }
   };
 
   const handleAnswer = (questionIndex, answerIndex) => {
@@ -65,17 +74,32 @@ function InteractiveAI() {
   };
 
   const submitQuiz = () => {
-    setShowResults(true);
+    if (Object.keys(quizAnswers).length === dynamicContent?.quiz?.length) {
+      setShowResults(true);
+    }
   };
 
   const calculateScore = () => {
-    if (!dynamicContent || !dynamicContent.quiz) return 0;
+    if (!dynamicContent?.quiz?.length) return 0;
     
     let correct = 0;
     dynamicContent.quiz.forEach((q, index) => {
       if (quizAnswers[index] === q.correct) correct++;
     });
     return Math.round((correct / dynamicContent.quiz.length) * 100);
+  };
+
+  const resetContent = () => {
+    setShowContent(false);
+    setCurrentQuiz(null);
+    setQuizAnswers({});
+    setShowResults(false);
+    setDynamicContent({
+      title: '',
+      topics: [],
+      quiz: []
+    });
+    setUserAge('');
   };
 
   return (
@@ -92,6 +116,12 @@ function InteractiveAI() {
         animate={{ opacity: 1 }}
         className="max-w-4xl mx-auto"
       >
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-600"></div>
@@ -129,7 +159,7 @@ function InteractiveAI() {
               </button>
             </form>
           </div>
-        ) : dynamicContent && currentQuiz === null ? (
+        ) : dynamicContent?.topics?.length > 0 && currentQuiz === null ? (
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold mb-6 dark:text-white">
               {dynamicContent.title}
@@ -153,7 +183,7 @@ function InteractiveAI() {
               Take Quiz
             </button>
           </div>
-        ) : !showResults ? (
+        ) : !showResults && dynamicContent?.quiz?.length > 0 ? (
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold mb-6 dark:text-white">Quiz</h2>
             <div className="space-y-6">
@@ -197,7 +227,7 @@ function InteractiveAI() {
               </p>
             </div>
             <button
-              onClick={() => setShowContent(false)}
+              onClick={resetContent}
               className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
             >
               Try Another Topic
