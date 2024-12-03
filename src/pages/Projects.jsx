@@ -82,7 +82,7 @@ function Projects() {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 50, opacity: 0 }}
-        className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
         <div className="relative">
@@ -99,8 +99,8 @@ function Projects() {
           </button>
         </div>
         <div className="p-6">
-          <h3 className="text-2xl font-bold mb-4">{project.title}</h3>
-          <p className="text-gray-600 mb-6 whitespace-pre-line">
+          <h3 className="text-2xl font-bold mb-4 dark:text-white">{project.title}</h3>
+          <p className="text-gray-600 dark:text-gray-300 mb-6 whitespace-pre-line">
             {project.longDescription || project.description}
           </p>
           <div className="flex flex-wrap gap-3 mb-6">
@@ -139,8 +139,8 @@ function Projects() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">My Projects</h1>
-        <p className="text-gray-600">
+        <h1 className="text-4xl font-bold mb-4 dark:text-white">My Projects</h1>
+        <p className="text-gray-600 dark:text-gray-300">
           A collection of my work in Machine Learning, Cloud Computing, and AI
         </p>
       </div>
@@ -164,14 +164,14 @@ function Projects() {
 
       {/* Major Projects */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6">Featured Projects</h2>
+        <h2 className="text-2xl font-bold mb-6 dark:text-white">Featured Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredProjects.major.map(project => (
             <motion.div
               key={project.id}
               layoutId={`project-${project.id}`}
               whileHover={{ y: -5 }}
-              className="bg-white rounded-lg overflow-hidden shadow-lg"
+              className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg"
             >
               <div className="relative">
                 <img
@@ -188,8 +188,8 @@ function Projects() {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                <p className="text-gray-600 mb-4">{project.description}</p>
+                <h3 className="text-xl font-semibold mb-2 dark:text-white">{project.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech, index) => (
                     <span
@@ -234,23 +234,23 @@ function Projects() {
 
       {/* Mini Projects */}
       <section>
-        <h2 className="text-2xl font-bold mb-6">Mini Projects</h2>
+        <h2 className="text-2xl font-bold mb-6 dark:text-white">Mini Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {filteredProjects.mini.map(project => (
             <motion.div
               key={project.id}
               whileHover={{ y: -3 }}
-              className="bg-white p-4 rounded-lg shadow"
+              className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow"
             >
               <div className="flex items-start justify-between mb-3">
-                <h3 className="font-semibold">{project.title}</h3>
+                <h3 className="font-semibold dark:text-white">{project.title}</h3>
                 <div className="flex gap-2">
                   {project.icons.map((icon, index) => (
                     <div key={index}>{icon}</div>
                   ))}
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">{project.description}</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{project.description}</p>
               <div className="flex justify-between items-center">
                 <div className="flex gap-3">
                   <a

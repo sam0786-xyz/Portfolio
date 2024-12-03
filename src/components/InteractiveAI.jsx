@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBrain, FaRobot, FaChalkboardTeacher } from 'react-icons/fa';
+import { llamaService } from '../services/llamaService';
 
 function InteractiveAI() {
   const [userAge, setUserAge] = useState('');
@@ -8,115 +9,46 @@ function InteractiveAI() {
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dynamicContent, setDynamicContent] = useState(null);
 
-  // Content adapted based on age groups
-  const getContent = (age) => {
-    if (age < 15) {
-      return {
-        title: "Introduction to AI for Young Minds",
-        description: "Let's learn about Artificial Intelligence in a fun way!",
-        concepts: [
-          {
-            title: "What is AI?",
-            content: "AI is like teaching computers to think and learn, just like how you learn new things at school!",
-            example: "When you play video games, the characters that aren't controlled by players use AI to make decisions.",
-          },
-          {
-            title: "Machine Learning",
-            content: "Imagine teaching a computer by showing it lots of examples, just like how you learn by practicing!",
-            example: "When you teach a computer to recognize cats by showing it many pictures of cats.",
-          }
-        ],
-        quiz: [
-          {
-            question: "What does AI help computers do?",
-            options: ["Think and learn", "Only play games", "Only solve math", "Make sandwiches"],
-            correct: 0
-          },
-          {
-            question: "How does a computer learn to recognize pictures?",
-            options: ["By looking at many examples", "By reading books", "By asking questions", "By playing games"],
-            correct: 0
-          }
-        ]
-      };
-    } else if (age < 25) {
-      return {
-        title: "Machine Learning Fundamentals",
-        description: "Explore the core concepts of Machine Learning and AI",
-        concepts: [
-          {
-            title: "Neural Networks",
-            content: "Neural networks are computing systems inspired by biological neural networks in human brains.",
-            example: "Deep learning models used in image recognition and natural language processing.",
-          },
-          {
-            title: "Supervised Learning",
-            content: "A type of machine learning where the model learns from labeled training data.",
-            example: "Email spam detection systems learning from previously classified emails.",
-          }
-        ],
-        quiz: [
-          {
-            question: "What inspired the creation of neural networks?",
-            options: ["Human brain", "Computer circuits", "Mathematics", "Physics"],
-            correct: 0
-          },
-          {
-            question: "What is supervised learning?",
-            options: [
-              "Learning from labeled data",
-              "Learning without data",
-              "Learning from unlabeled data",
-              "Learning from experiments"
-            ],
-            correct: 0
-          }
-        ]
-      };
-    } else {
-      return {
-        title: "Advanced Machine Learning Concepts",
-        description: "Deep dive into advanced ML algorithms and architectures",
-        concepts: [
-          {
-            title: "Deep Learning Architectures",
-            content: "Study of complex neural network architectures including CNNs, RNNs, and Transformers.",
-            example: "BERT and GPT models in natural language processing.",
-          },
-          {
-            title: "Reinforcement Learning",
-            content: "Learning through interaction with an environment using rewards and penalties.",
-            example: "AlphaGo learning to play Go through millions of self-played games.",
-          }
-        ],
-        quiz: [
-          {
-            question: "Which model architecture revolutionized NLP?",
-            options: ["Transformer", "Simple Neural Network", "Decision Tree", "Linear Regression"],
-            correct: 0
-          },
-          {
-            question: "What is the key concept in reinforcement learning?",
-            options: [
-              "Learning through rewards and penalties",
-              "Learning through supervision",
-              "Learning through examples",
-              "Learning through rules"
-            ],
-            correct: 0
-          }
-        ]
-      };
+  const generateAgeAppropriateContent = async (age) => {
+    setIsLoading(true);
+    try {
+      const topics = age < 13 
+        ? ['What is AI?', 'How do computers learn?', 'AI in everyday life']
+        : age < 18
+        ? ['Machine Learning Basics', 'Neural Networks', 'AI Applications']
+        : ['Deep Learning', 'Transformer Architecture', 'AI Ethics'];
+
+      const content = await Promise.all(
+        topics.map(topic => llamaService.explainConcept(topic, age))
+      );
+
+      const quiz = await llamaService.generateQuiz(
+        'Artificial Intelligence',
+        age < 13 ? 'beginner' : age < 18 ? 'intermediate' : 'advanced'
+      );
+
+      setDynamicContent({
+        title: `AI Learning Journey for ${age} year olds`,
+        topics: topics.map((title, index) => ({
+          title,
+          content: content[index]
+        })),
+        quiz: quiz.questions
+      });
+    } catch (error) {
+      console.error('Error generating content:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleAgeSubmit = (e) => {
+  const handleAgeSubmit = async (e) => {
     e.preventDefault();
     setShowContent(true);
-    setCurrentQuiz(null);
-    setQuizAnswers({});
-    setShowResults(false);
+    await generateAgeAppropriateContent(parseInt(userAge));
   };
 
   const startQuiz = () => {
@@ -137,198 +69,140 @@ function InteractiveAI() {
   };
 
   const calculateScore = () => {
-    const content = getContent(parseInt(userAge));
+    if (!dynamicContent || !dynamicContent.quiz) return 0;
+    
     let correct = 0;
-    content.quiz.forEach((q, index) => {
+    dynamicContent.quiz.forEach((q, index) => {
       if (quizAnswers[index] === q.correct) correct++;
     });
-    return (correct / content.quiz.length) * 100;
+    return Math.round((correct / dynamicContent.quiz.length) * 100);
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-4 dark:text-white">Learn AI</h1>
+        <p className="text-gray-600 dark:text-gray-300">
+          Interactive AI learning platform with hands-on examples
+        </p>
+      </div>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-4xl mx-auto"
       >
-        {!showContent ? (
-          <motion.div
-            initial={{ y: 20 }}
-            animate={{ y: 0 }}
-            className="bg-white p-8 rounded-lg shadow-lg"
-          >
-            <h2 className="text-2xl font-bold mb-6 text-center">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-600"></div>
+          </div>
+        ) : !showContent ? (
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-6 dark:text-white">
               Interactive AI Learning Experience
             </h2>
-            <form onSubmit={handleAgeSubmit} className="max-w-sm mx-auto">
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">
-                  Enter your age to get personalized ML content:
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              Please enter your age so we can provide age-appropriate AI learning content.
+            </p>
+            <form onSubmit={handleAgeSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="age" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Age
                 </label>
                 <input
                   type="number"
+                  id="age"
                   value={userAge}
                   onChange={(e) => setUserAge(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                  required
-                  min="5"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500
+                    dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  min="7"
                   max="100"
+                  required
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 Start Learning
               </button>
             </form>
-          </motion.div>
-        ) : (
-          <AnimatePresence mode='wait'>
-            <motion.div
-              key={currentQuiz !== null ? 'quiz' : 'content'}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="bg-white p-8 rounded-lg shadow-lg"
-            >
-              {currentQuiz === null ? (
-                // Content Display
-                <>
-                  <h2 className="text-2xl font-bold mb-6">
-                    {getContent(parseInt(userAge)).title}
-                  </h2>
-                  <p className="text-gray-600 mb-8">
-                    {getContent(parseInt(userAge)).description}
+          </div>
+        ) : dynamicContent && currentQuiz === null ? (
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-6 dark:text-white">
+              {dynamicContent.title}
+            </h2>
+            {dynamicContent.topics.map((topic, index) => (
+              <div key={index} className="mb-8">
+                <h3 className="text-xl font-semibold mb-4 dark:text-white">
+                  {topic.title}
+                </h3>
+                <div className="prose max-w-none dark:prose-invert">
+                  <p className="text-gray-600 dark:text-gray-300">
+                    {topic.content}
                   </p>
-                  
-                  {getContent(parseInt(userAge)).concepts.map((concept, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.2 }}
-                      className="mb-8 p-6 bg-gray-50 rounded-lg"
-                    >
-                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                        <FaBrain className="text-indigo-600" />
-                        {concept.title}
-                      </h3>
-                      <p className="text-gray-700 mb-4">{concept.content}</p>
-                      <div className="bg-indigo-50 p-4 rounded-lg">
-                        <p className="text-sm text-indigo-800">
-                          <strong>Example:</strong> {concept.example}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                  
-                  <button
-                    onClick={startQuiz}
-                    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
-                  >
-                    Take Quiz
-                  </button>
-                </>
-              ) : (
-                // Quiz Display
-                <>
-                  {!showResults ? (
-                    <>
-                      <h3 className="text-xl font-bold mb-6">
-                        Question {currentQuiz + 1} of {getContent(parseInt(userAge)).quiz.length}
-                      </h3>
-                      <div className="mb-6">
-                        <p className="text-lg mb-4">
-                          {getContent(parseInt(userAge)).quiz[currentQuiz].question}
-                        </p>
-                        <div className="space-y-3">
-                          {getContent(parseInt(userAge)).quiz[currentQuiz].options.map((option, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleAnswer(currentQuiz, index)}
-                              className={`w-full p-3 text-left rounded-lg transition-colors ${
-                                quizAnswers[currentQuiz] === index
-                                  ? 'bg-indigo-600 text-white'
-                                  : 'bg-gray-100 hover:bg-gray-200'
-                              }`}
-                            >
-                              {option}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex justify-between">
-                        {currentQuiz > 0 && (
-                          <button
-                            onClick={() => setCurrentQuiz(prev => prev - 1)}
-                            className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                          >
-                            Previous
-                          </button>
-                        )}
-                        {currentQuiz < getContent(parseInt(userAge)).quiz.length - 1 ? (
-                          <button
-                            onClick={() => setCurrentQuiz(prev => prev + 1)}
-                            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-                            disabled={quizAnswers[currentQuiz] === undefined}
-                          >
-                            Next
-                          </button>
-                        ) : (
-                          <button
-                            onClick={submitQuiz}
-                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                            disabled={Object.keys(quizAnswers).length !== getContent(parseInt(userAge)).quiz.length}
-                          >
-                            Submit Quiz
-                          </button>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    // Quiz Results
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-center"
-                    >
-                      <h3 className="text-2xl font-bold mb-4">Quiz Results</h3>
-                      <div className="mb-6">
-                        <p className="text-4xl font-bold text-indigo-600 mb-2">
-                          {calculateScore()}%
-                        </p>
-                        <p className="text-gray-600">
-                          {calculateScore() >= 70 
-                            ? "Great job! You've mastered these concepts!"
-                            : "Keep learning! Try reviewing the concepts again."}
-                        </p>
-                      </div>
-                      <div className="space-x-4">
-                        <button
-                          onClick={() => setShowContent(false)}
-                          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-                        >
-                          Start Over
-                        </button>
-                        <button
-                          onClick={() => {
-                            setCurrentQuiz(null);
-                            setQuizAnswers({});
-                            setShowResults(false);
-                          }}
-                          className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                        >
-                          Review Concepts
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </>
-              )}
-            </motion.div>
-          </AnimatePresence>
+                </div>
+              </div>
+            ))}
+            <button
+              onClick={startQuiz}
+              className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Take Quiz
+            </button>
+          </div>
+        ) : !showResults ? (
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-6 dark:text-white">Quiz</h2>
+            <div className="space-y-6">
+              {dynamicContent.quiz.map((question, qIndex) => (
+                <div key={qIndex} className="space-y-4">
+                  <p className="font-medium dark:text-white">{question.question}</p>
+                  <div className="space-y-2">
+                    {question.answers.map((answer, aIndex) => (
+                      <button
+                        key={aIndex}
+                        onClick={() => handleAnswer(qIndex, aIndex)}
+                        className={`w-full text-left p-3 rounded-lg transition-colors
+                          ${quizAnswers[qIndex] === aIndex
+                            ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          }`}
+                      >
+                        {answer}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <button
+                onClick={submitQuiz}
+                className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                Submit Quiz
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-6 dark:text-white">Quiz Results</h2>
+            <div className="text-center mb-6">
+              <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                {calculateScore()}%
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                {calculateScore() >= 70 ? 'Great job!' : 'Keep learning!'}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowContent(false)}
+              className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Try Another Topic
+            </button>
+          </div>
         )}
       </motion.div>
     </div>

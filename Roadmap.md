@@ -80,6 +80,8 @@ The roadmap has been updated with your new requirements. Here's the refined stru
 
 ### **Phase 4: AI and Backend Integration**
 
+API key of Llama: LA-b89ba571ba77457fb82231c7a4243297091cd7bb748448d0b25afcf4310ca371
+
 - [ ] **AI for Certificates Section**:
   - Build/Train an NLP model to analyze certificates for skill extraction.
   - Set up backend APIs for real-time analysis.
