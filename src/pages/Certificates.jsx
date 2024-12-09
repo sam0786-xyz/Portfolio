@@ -20,7 +20,7 @@ function Certificates() {
       date: "2024",
       category: "ml",
       skills: ["Supervised Learning", "Linear Regression", "Logistic Regression for Classification", "Gradient Descent"],
-      image: "https://github.com/sam0786-xyz/Portfolio/blob/main/src/assets/certificates/Cousera%20ML.png",
+      image: "src\assets\certificates\Cousera ML.png",
       link: "https://coursera.org/share/8ecc4a664c66009172dd6997d0d3c75f",
       icon: <SiTensorflow className="text-[#FF6F00]" size={24} />
     },
