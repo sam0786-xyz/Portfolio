@@ -10,6 +10,11 @@ if (!LLAMA_API_KEY) {
 export const llamaService = {
   async generateContent(prompt, options = {}) {
     try {
+      const headers = {
+        'Authorization': `Bearer ${LLAMA_API_KEY}`,
+        'Content-Type': 'application/json'
+      };
+
       const response = await axios.post(`${LLAMA_API_URL}/chat`, {
         api_key: LLAMA_API_KEY,
         messages: [{
@@ -20,7 +25,7 @@ export const llamaService = {
         max_length: options.maxTokens || 500,
         temperature: options.temperature || 0.7,
         stop_sequences: ["Human:", "Assistant:"]
-      });
+      }, { headers });
 
       if (response.data && response.data.choices && response.data.choices[0]) {
         return response.data.choices[0].message.content;

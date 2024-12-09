@@ -15,14 +15,14 @@ function Certificates() {
   const certificates = [
     {
       id: 1,
-      title: "AWS Machine Learning Specialty",
-      issuer: "Amazon Web Services",
+      title: "Supervised Machine Learning: Regression and Classification",
+      issuer: "DeepLearning.AI and Stanford University",
       date: "2024",
-      category: "cloud",
-      skills: ["AWS SageMaker", "ML Ops", "Deep Learning"],
-      image: "/certificates/aws-ml.jpg",
-      link: "https://aws.amazon.com/certification/",
-      icon: <FaAws className="text-[#FF9900]" size={24} />
+      category: "ml",
+      skills: ["Supervised Learning", "Linear Regression", "Logistic Regression for Classification", "Gradient Descent"],
+      image: "https://github.com/sam0786-xyz/Portfolio/blob/main/src/assets/certificates/Cousera%20ML.png",
+      link: "https://coursera.org/share/8ecc4a664c66009172dd6997d0d3c75f",
+      icon: <SiTensorflow className="text-[#FF6F00]" size={24} />
     },
     {
       id: 2,

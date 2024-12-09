@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { FaBrain, FaRobot, FaChalkboardTeacher } from 'react-icons/fa';
-import { llamaService } from '../services/llamaService';
 
 function InteractiveAI() {
   const [userAge, setUserAge] = useState('');
@@ -17,36 +16,58 @@ function InteractiveAI() {
   });
   const [error, setError] = useState(null);
 
-  const generateAgeAppropriateContent = async (age) => {
+  const fetchQuestions = async (age) => {
     setIsLoading(true);
     setError(null);
     try {
-      const topics = age < 13 
-        ? ['What is AI?', 'How do computers learn?', 'AI in everyday life']
-        : age < 18
-        ? ['Machine Learning Basics', 'Neural Networks', 'AI Applications']
-        : ['Deep Learning', 'Transformer Architecture', 'AI Ethics'];
-
-      const content = await Promise.all(
-        topics.map(topic => llamaService.explainConcept(topic, age))
-      );
-
-      const quiz = await llamaService.generateQuiz(
-        'Artificial Intelligence',
-        age < 13 ? 'beginner' : age < 18 ? 'intermediate' : 'advanced'
-      );
-
-      setDynamicContent({
-        title: `AI Learning Journey for ${age} year olds`,
-        topics: topics.map((title, index) => ({
-          title,
-          content: content[index]
-        })),
-        quiz: quiz.questions || []
+      const response = await fetch('/generate-questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ age }),
       });
+      const data = await response.json();
+      if (response.ok) {
+        setDynamicContent(prev => ({
+          ...prev,
+          quiz: data.questions // Assuming the response contains questions in this format
+        }));
+      } else {
+        throw new Error(data.error || 'Failed to fetch questions');
+      }
     } catch (error) {
-      console.error('Error generating content:', error);
-      setError('Failed to generate content. Please try again.');
+      console.error('Error fetching questions:', error);
+      setError('Failed to generate questions. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchLearningContent = async (age) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/generate-learning-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ age }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setDynamicContent(prev => ({
+          ...prev,
+          title: `AI Learning Journey for ${age} year olds`,
+          topics: data.learning_content // Assuming the response contains learning content in this format
+        }));
+      } else {
+        throw new Error(data.error || 'Failed to fetch learning content');
+      }
+    } catch (error) {
+      console.error('Error fetching learning content:', error);
+      setError('Failed to generate learning content. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +76,8 @@ function InteractiveAI() {
   const handleAgeSubmit = async (e) => {
     e.preventDefault();
     setShowContent(true);
-    await generateAgeAppropriateContent(parseInt(userAge));
+    await fetchLearningContent(parseInt(userAge));
+    await fetchQuestions(parseInt(userAge));
   };
 
   const startQuiz = () => {
@@ -239,4 +261,4 @@ function InteractiveAI() {
   );
 }
 
-export default InteractiveAI; 
+export default InteractiveAI;

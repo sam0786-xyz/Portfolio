@@ -12,3 +12,16 @@ export const securityHeaders = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
 }; 
+
+export const validateApiKey = () => {
+  const requiredEnvVars = [
+    'REACT_APP_LLAMA_API_KEY',
+    'REACT_APP_API_URL'
+  ];
+
+  requiredEnvVars.forEach(varName => {
+    if (!process.env[varName]) {
+      throw new Error(`Missing required environment variable: ${varName}`);
+    }
+  });
+}; 
