@@ -53,7 +53,6 @@ function Projects() {
             onClick={onClose}
             className="absolute top-4 right-4 bg-white rounded-full p-2 hover:bg-gray-100"
           >
-            ×
           </button>
         </div>
         <div className="p-6">

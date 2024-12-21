@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa';
 import { 
   SiGooglecloud, 
-  SiMicrosoftazure 
+  SiMicrosoft
 } from 'react-icons/si';
 
 function Contact() {
@@ -58,9 +58,9 @@ function Contact() {
       color: 'hover:text-[#4285F4]'
     },
     {
-      name: 'Azure',
-      url: 'https://azure.microsoft.com/certifications/',
-      icon: <SiMicrosoftazure size={24} />,
+      name: 'Microsoft Learn',
+      url: 'https://learn.microsoft.com/en-us/users/mohammadsameer-6572/achievements?tab=tab-modules',
+      icon: <SiMicrosoft size={24} />,
       color: 'hover:text-[#0089D6]'
     }
   ];

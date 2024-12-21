@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSearch, FaAws, FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import { SiTensorflow, SiPytorch, SiKaggle } from 'react-icons/si';
-import { useML } from '../context/MLContext';
+import cert1 from '../assets/certificates/ML.png';
+// import tensorflowCert from '../assets/certificates/tensorflow.jpg'
 
 function Certificates() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { analyzeCertificate, isAnalyzing, analysisResults } = useML();
 
   // Sample certificates data
   const certificates = [
@@ -20,7 +20,7 @@ function Certificates() {
       date: "2024",
       category: "ml",
       skills: ["Supervised Learning", "Linear Regression", "Logistic Regression for Classification", "Gradient Descent"],
-      image: "src\assets\certificates\Cousera ML.png",
+      image: cert1, // Changed from <cert1/> to cert1
       link: "https://coursera.org/share/8ecc4a664c66009172dd6997d0d3c75f",
       icon: <SiTensorflow className="text-[#FF6F00]" size={24} />
     },
@@ -31,7 +31,7 @@ function Certificates() {
       date: "2023",
       category: "ml",
       skills: ["Deep Learning", "Neural Networks", "Computer Vision"],
-      image: "/certificates/tensorflow.jpg",
+      //  image: tensorflowCert, // Changed from "/certificates/tensorflow.jpg" to the actual import
       link: "https://tensorflow.org/certificate",
       icon: <SiTensorflow className="text-[#FF6F00]" size={24} />
     },
@@ -65,61 +65,6 @@ function Certificates() {
       return () => clearInterval(timer);
     }
   }, [viewMode, filteredCertificates.length]);
-
-  const handleCertificateUpload = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = () => analyzeCertificate(img);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const uploadSection = (
-    <div className="mb-8">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleCertificateUpload}
-        className="hidden"
-        id="certificate-upload"
-      />
-      <label
-        htmlFor="certificate-upload"
-        className="cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
-      >
-        Upload Certificate for Analysis
-      </label>
-      {isAnalyzing && (
-        <div className="mt-4">
-          <p className="text-gray-600">Analyzing certificate...</p>
-          {/* Add loading spinner */}
-        </div>
-      )}
-      {analysisResults && (
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold">Analysis Results</h3>
-          <div className="mt-2">
-            <h4 className="font-medium">Detected Skills:</h4>
-            <div className="flex flex-wrap gap-2 mt-1">
-              {analysisResults.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-sm"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <motion.div
@@ -318,10 +263,8 @@ function Certificates() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {uploadSection}
     </motion.div>
   );
 }
 
-export default Certificates; 
+export default Certificates;
